@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: py-amazon-aim
+Version: 0.1.0
+Summary: A Python implementation of the Amazon Inventory Management (AIM) API
+Home-page: UNKNOWN
+Author: Ryan Wilcox
+Author-email: rwilcox@wilcoxd.com
+License: GPL
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python

@@ -1,0 +1,6 @@
+virtual-env/*
+dist/*
+build/*
+docs/build/doctrees/*
+src/py-amazon-aim.egg-info/*
+*.pyc
