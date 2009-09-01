@@ -25,7 +25,7 @@ class AmazonAIM(object):
     
     def _connect( self, url, **extraParams ):
         req = urllib2.Request(url)
-        base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
+        base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
         req.add_header("Authorization", "Basic %s" % base64string)
         req.add_header("Content-Type", "text/xml")
         for key, value in extraParams.iteritems():
