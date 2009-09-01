@@ -41,10 +41,9 @@ def callAmazon(operation=None, id=None):
         output = connection.download_open_listings_report(id)
     return output
 
-#print sys.argv
 
 paramStr = sys.argv[1] if len(sys.argv) > 1 else ""
-operation = 0
+operation = START_REPORT
 id = None
 if paramStr == "status":
     operation = REPORT_STATUS
@@ -52,4 +51,12 @@ if paramStr == "download":
     operation == DOWNLOAD_REPORT
     id = sys.argv[2]
 
-callAmazon(operation, id)
+output = callAmazon(operation, id)
+if operation == START_REPORT:
+    print output
+if operation == REPORT_STATUS:
+    # TODO: fill me in
+    pass
+if operation == DOWNLOAD_REPORT:
+    # TODO: fill me in
+    pass
