@@ -61,7 +61,7 @@ class AmazonAIM(object):
     
     def status_open_listings_report(self, lite=True):
         """get the status of any ongoing open listings report on the server.
-        Returns a dictionary of reportstarttime, reportendtime and reportid. The time dictionary value are (for now)
+        Returns a list of dictionaries of reportstarttime, reportendtime and reportid. The time dictionary value are (for now)
         in the format '08-30-2009:17-42-25'."""
         
         flavor = "OpenListingsLite"
@@ -71,7 +71,6 @@ class AmazonAIM(object):
         new_output = []
         e = ElementTree.fromstring(output)
         
-        # TODO: test this sowith more than 1 report going on.
         for currChild in e.getchildren():
             this_item = {}
             for currMatch in self.xmlOutputRegex.finditer(currChild.text):

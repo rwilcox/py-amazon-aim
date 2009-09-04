@@ -66,8 +66,13 @@ def main(paramStr):
             print "No report currently working. Your report is probably finished!"
         
     if operation == REPORT_STATUS:
-        # TODO: fill me in
-        pass
+        for curr_report in output:
+            if curr_report["reportendtime"]:
+                print "Report ID: %s. started on: %s, finished processing on %s" % ( curr_report["reportid"], curr_report["reportstarttime"], curr_report["reportendtime"] )
+            else:
+                # it is blank AKA in process
+                print "** UNFINISHED Report ID: %s. started on: %s" % ( curr_report["reportid"], curr_report["reportstarttime"] )
+        
     if operation == DOWNLOAD_REPORT:
         # TODO: fill me in
         pass
