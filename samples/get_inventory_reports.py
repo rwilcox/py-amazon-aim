@@ -9,6 +9,7 @@ import sys
 START_REPORT = 0
 REPORT_STATUS = 1
 DOWNLOAD_REPORT = 2
+CURRENTLY_WORKING_REPORT = 3
 
 try:
     from pyamazonaim.aim import *
@@ -35,6 +36,8 @@ def callAmazon(operation=None, id=None):
     
     if operation == START_REPORT:
         output = connection.generate_open_listings_lite_report()
+    if operation == CURRENTLY_WORKING_REPORT:
+        output = connection.there_is_a_report_processing()
     if operation == REPORT_STATUS:
         output = connection.status_open_listings_report()
     if operation == DOWNLOAD_REPORT:
@@ -47,6 +50,8 @@ operation = START_REPORT
 id = None
 if paramStr == "status":
     operation = REPORT_STATUS
+if paramStr == "current":
+    operation = CURRENTLY_WORKING_REPORT
 if paramStr == "download":
     operation == DOWNLOAD_REPORT
     id = sys.argv[2]
@@ -54,6 +59,13 @@ if paramStr == "download":
 output = callAmazon(operation, id)
 if operation == START_REPORT:
     print output
+if operation == CURRENTLY_WORKING_REPORT:
+    is_one_running, rid = operation
+    if is_one_running:
+        print "Report Id %s is currently running (save this ID so you can download the report later!!!!)" % (rid)
+    else:
+        print "No report currently working. Your report is probably finished!"
+    print "The currently working "
 if operation == REPORT_STATUS:
     # TODO: fill me in
     pass
