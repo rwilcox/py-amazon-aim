@@ -108,5 +108,15 @@ class AmazonAIM(object):
         
         return arrayOfDictionaries
     
+    def there_is_a_report_processing(self, lite=True):
+        """a convenience method returns True, reportID if there's a report that we're waiting for Amazon to finish,
+        False, None otherwise."""
+        reports = self.status_open_listings_report(lite)
         
+        # reports not finished yet will have a blank end time
+        for curr_report in reports:
+            if not(curr_report["reportendtime"]):  # blank == False in Python
+                return [True, curr_report["reportid"]]
+        
+        return [False, None]
     
