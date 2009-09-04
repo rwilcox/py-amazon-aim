@@ -44,31 +44,37 @@ def callAmazon(operation=None, id=None):
         output = connection.download_open_listings_report(id)
     return output
 
+def main(paramStr):
+    operation = START_REPORT
+    id = None
+    if paramStr == "status":
+        operation = REPORT_STATUS
+    if paramStr == "current":
+        operation = CURRENTLY_WORKING_REPORT
+    if paramStr == "download":
+        operation == DOWNLOAD_REPORT
+        id = sys.argv[2]
+    
+    output = callAmazon(operation, id)
+    if operation == START_REPORT:
+        print output
+    if operation == CURRENTLY_WORKING_REPORT:
+        is_one_running, rid = operation
+        if is_one_running:
+            print "Report Id %s is currently running (save this ID so you can download the report later!!!!)" % (rid)
+        else:
+            print "No report currently working. Your report is probably finished!"
+        print "The currently working "
+    if operation == REPORT_STATUS:
+        # TODO: fill me in
+        pass
+    if operation == DOWNLOAD_REPORT:
+        # TODO: fill me in
+        pass
+    
 
-paramStr = sys.argv[1] if len(sys.argv) > 1 else ""
-operation = START_REPORT
-id = None
-if paramStr == "status":
-    operation = REPORT_STATUS
-if paramStr == "current":
-    operation = CURRENTLY_WORKING_REPORT
-if paramStr == "download":
-    operation == DOWNLOAD_REPORT
-    id = sys.argv[2]
 
-output = callAmazon(operation, id)
-if operation == START_REPORT:
-    print output
-if operation == CURRENTLY_WORKING_REPORT:
-    is_one_running, rid = operation
-    if is_one_running:
-        print "Report Id %s is currently running (save this ID so you can download the report later!!!!)" % (rid)
-    else:
-        print "No report currently working. Your report is probably finished!"
-    print "The currently working "
-if operation == REPORT_STATUS:
-    # TODO: fill me in
-    pass
-if operation == DOWNLOAD_REPORT:
-    # TODO: fill me in
-    pass
+if __name__ == '__main__':
+    paramStr = sys.argv[1] if len(sys.argv) > 1 else ""
+    main(paramStr)
+
