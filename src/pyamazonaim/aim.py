@@ -68,15 +68,16 @@ class AmazonAIM(object):
         if not(lite):
             flavor = "OpenListings"
         output = self._report_statuses(flavor)
-        newOutput = {}
+        new_output = []
         e = ElementTree.fromstring(output)
         
-        # TODO: make this so it can handle more than 1 report going on.
+        # TODO: test this sowith more than 1 report going on.
         for currChild in e.getchildren():
+            this_item = {}
             for currMatch in self.xmlOutputRegex.finditer(currChild.text):
-                newOutput[currMatch.group(1)] = currMatch.group(2)
-        return newOutput
-        #return output  # TODO: parsing here?
+                this_item[currMatch.group(1)] = currMatch.group(2)
+            new_output.append(this_item)
+        return new_output
     
     
     def download_open_listings_report(self, id=None, lite=True):
