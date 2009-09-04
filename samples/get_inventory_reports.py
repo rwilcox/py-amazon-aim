@@ -54,6 +54,24 @@ def main(paramStr):
     if paramStr == "download":
         operation == DOWNLOAD_REPORT
         id = sys.argv[2]
+    if (paramStr == "help") or (paramStr == "--help"):
+        print """
+        To use the Amazon Inventory Management API to get inventory reports, you must call this script the following way
+        $ python get_inventory_reports.py    # creates a new process Amazon Server side
+        $ python get_inventory_reports.py status
+           OR
+        $ python get_inventory_reports.py current
+        # gets the report id of the report you created in step 1. The report may take up to 30 minutes to finish,
+        # so run this command, go off and do something else, then run it again, and repeat
+        # until you see that no report is currently working.
+        # anyway, export REPORT_ID=(the report ID from the output from this command)
+        
+        $ python download $REPORT_ID   # which will give you the report amazon generated for you
+        
+        (the source code is an excellent place to figure out what actual Amazon A.I.M or (py-amazon-aim)
+        web service calls these parameters translate too)
+        """
+        return
     
     output = callAmazon(operation, id)
     if operation == START_REPORT:
@@ -71,7 +89,7 @@ def main(paramStr):
                 print "Report ID: %s. started on: %s, finished processing on %s" % ( curr_report["reportid"], curr_report["reportstarttime"], curr_report["reportendtime"] )
             else:
                 # it is blank AKA in process
-                print "** UNFINISHED Report ID: %s. started on: %s" % ( curr_report["reportid"], curr_report["reportstarttime"] )
+                print "** CURRENTLY WORKING Report ID: %s. started on: %s" % ( curr_report["reportid"], curr_report["reportstarttime"] )
         
     if operation == DOWNLOAD_REPORT:
         # TODO: fill me in
