@@ -59,12 +59,12 @@ def main(paramStr):
     if operation == START_REPORT:
         print output
     if operation == CURRENTLY_WORKING_REPORT:
-        is_one_running, rid = operation
+        is_one_running, rid = output
         if is_one_running:
             print "Report Id %s is currently running (save this ID so you can download the report later!!!!)" % (rid)
         else:
             print "No report currently working. Your report is probably finished!"
-        print "The currently working "
+        
     if operation == REPORT_STATUS:
         # TODO: fill me in
         pass
