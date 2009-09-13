@@ -1,4 +1,4 @@
-import os, urllib2, string, inspect, re, StringIO
+import os, urllib2, string, inspect, re, StringIO, datetime
 import base64
 from xml.etree import ElementTree
 
@@ -8,6 +8,54 @@ __license__ = "BSD/GPL"
 __url__ = ""
 __version__ = "0.1.0"
 
+
+class Report(object):
+    """
+    Represents an inventory report requested from Amazon.
+    Will eventually provide an OOP way to create reports and get statuses,
+    as an alternative to the (more foundational and more frankly procedural) AmazonAIM object
+    """
+    
+    def __init__(self, report_id = None, start=None, end=None):
+        self.report_id = None
+        self.start = start   # start time of the report
+        self.end = end     # end time of the report
+    
+    def __repr__(self):
+        return "aim.Report(report_id='%s', start=%s, end=%s) " % (self.report_id, self.start.__repr__(), self.end.__repr__())
+    
+    @classmethod
+    def get_all_reports(cls, connection, lite=True):
+        """Return the user's current reports as Report objects"""
+        raw_reports = connection.status_open_listings_report(lite)
+        output = []
+        for curr_raw in raw_reports:
+            curr = Report()
+            curr.set_attribute_from_html( "reportid", curr_raw["reportid"] )
+            curr.set_attribute_from_html( "reportstarttime", curr_raw["reportstarttime"])
+            curr.set_attribute_from_html( "reportendtime", curr_raw["reportendtime"] )
+            output.append(curr)
+        return output
+    
+    def _amazon_date_time_to_python_date_time(self, date_string):
+        # example date string:
+        #09-13-2009:10-11-31
+        date, time = date_string.split(":")
+        month, day, year = date.split("-")
+        hour, minute, second = time.split("-")
+        return datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+    
+    def set_attribute_from_html(self, attributeName, attributeValue):
+        """meant to take raw input from Amazon's XML output and turn it into
+        proper Python objects in this class"""
+        if attributeName == "reportid":
+            self.report_id = attributeValue
+        if attributeName == "reportstarttime":
+            self.start = self._amazon_date_time_to_python_date_time(attributeValue)
+        if attributeName == "reportendtime":
+            self.end = self._amazon_date_time_to_python_date_time(attributeValue)
+        
+    
 
 class AmazonAIM(object):
     """
