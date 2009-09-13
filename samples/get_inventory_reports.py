@@ -10,6 +10,7 @@ START_REPORT = 0
 REPORT_STATUS = 1
 DOWNLOAD_REPORT = 2
 CURRENTLY_WORKING_REPORT = 3
+DOWNLOAD_REPORT_FLAT = 4
 
 try:
     from pyamazonaim.aim import *
@@ -41,7 +42,9 @@ def callAmazon(operation=None, report_id=None):
     if operation == REPORT_STATUS:
         output = connection.status_open_listings_report()
     if operation == DOWNLOAD_REPORT:
-        output = connection.download_open_listings_report(id)
+        output = connection.download_open_listings_report(report_id)
+    if operation == DOWNLOAD_REPORT_FLAT:
+        output = connection.download_open_listings_report(report_id, flat=True)
     return output
 
 def main(paramStr):
@@ -53,6 +56,9 @@ def main(paramStr):
         operation = CURRENTLY_WORKING_REPORT
     if paramStr == "download":
         operation = DOWNLOAD_REPORT
+        report_id = sys.argv[2]
+    if paramStr == "download_flat":
+        operation = DOWNLOAD_REPORT_FLAT
         report_id = sys.argv[2]
     if (paramStr == "help") or (paramStr == "--help"):
         print """
@@ -67,6 +73,8 @@ def main(paramStr):
         # anyway, export REPORT_ID=(the report ID from the output from this command)
         
         $ python download $REPORT_ID   # which will give you the report amazon generated for you
+           OR
+        $ python download_flat $REPORT_ID  # which gives you the report sorted all out by ASIN#
         
         (the source code is an excellent place to figure out what actual Amazon A.I.M or (py-amazon-aim)
         web service calls these parameters translate too)
@@ -95,6 +103,9 @@ def main(paramStr):
         # TODO: fill me in
         pass
     
+    if operation == DOWNLOAD_REPORT_FLAT:
+        for curr_asin, curr_value in output.iteritems():
+            print "%s is currently priced at: %s" % ( curr_asin, curr_value["price"] )
 
 
 if __name__ == '__main__':

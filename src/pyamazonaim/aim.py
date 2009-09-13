@@ -81,7 +81,12 @@ class AmazonAIM(object):
     
     def download_open_listings_report(self, report_id=None, lite=True, flat=False):
         """download the open listings report specified by the id parameter passed in.
-        Returns a list of {sku:..., quantity:..., price:..., asin:....} items
+        Additional parameters let you control the typo of report you requested (lite=True)(default) or not),
+        And how you want your data outputted (as a list of dictionaries (flat=False)(default) or as
+        just dictionaries where the keys are the ASIN numbers (which should be unique from product to product)(flat=True).
+        
+        Returns a list of {sku:..., quantity:..., price:..., asin:....} items if flat=False mode,
+        a dictionary of {asin: {sku: ..., quantity: ..., price: ...} } if flat=True
         """
         flavor = "OpenListingsLite"
         if not(lite):
@@ -94,19 +99,26 @@ class AmazonAIM(object):
         # EXCEPT it also includes header information repeated every so often (as if it was returning this information on a paginated basis)
         io = StringIO.StringIO(output)
         arrayOfDictionaries = []
+        dictionaryOfItems = {}
         for currline in io:
             fields = currline.split("\t")
             # TODO: can this be in arbitrary order, or will it ALWAYS be this way? WD-rpw 08-30-2009
-            sellerSKU = fields[0]
-            sellerQuantity = fields[1]
-            sellerPrice = fields[2]
-            itemASIN = fields[3]
+            sellerSKU = fields[0].strip()
+            sellerQuantity = fields[1].strip()
+            sellerPrice = fields[2].strip()
+            itemASIN = fields[3].strip()
             if sellerSKU != "seller-sku":
                 # it must be an item line (right!?)
-                arrayOfDictionaries.append( dict(sku=sellerSKU, quantity=sellerQuantity, price=sellerPrice, asin=itemASIN) )
+                infoDict = dict(sku=sellerSKU, quantity=sellerQuantity, price=sellerPrice, asin=itemASIN)
+                if flat:
+                    dictionaryOfItems[itemASIN] = infoDict
+                else:
+                    arrayOfDictionaries.append(infoDict)
             
-        
-        return arrayOfDictionaries
+        if flat:
+            return dictionaryOfItems
+        else:
+            return arrayOfDictionaries
     
     def there_is_a_report_processing(self, lite=True):
         """a convenience method returns True, reportID if there's a report that we're waiting for Amazon to finish,
