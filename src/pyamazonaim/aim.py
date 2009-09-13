@@ -79,7 +79,7 @@ class AmazonAIM(object):
         return new_output
     
     
-    def download_open_listings_report(self, id=None, lite=True):
+    def download_open_listings_report(self, report_id=None, lite=True, flat=False):
         """download the open listings report specified by the id parameter passed in.
         Returns a list of {sku:..., quantity:..., price:..., asin:....} items
         """
@@ -87,7 +87,7 @@ class AmazonAIM(object):
         if not(lite):
             flavor = "OpenListings"
         url = "https://secure.amazon.com/exec/panama/seller-admin/download/report"
-        output = self._connect(url, ReportId=id)
+        output = self._connect(url, ReportId=report_id)
         
         # output is a tab return delimited file
         # the first line is the header line, and the next lines are the items

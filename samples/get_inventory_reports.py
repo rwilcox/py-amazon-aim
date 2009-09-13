@@ -28,7 +28,7 @@ def get_username_password():
     password = os.environ["AMAZON_PASSWORD"]
     return username, password
 
-def callAmazon(operation=None, id=None):
+def callAmazon(operation=None, report_id=None):
     """Performs operations on the Amazon API"""
     uname, passw = get_username_password()
     connection = AmazonAIM(uname, passw)
@@ -46,14 +46,14 @@ def callAmazon(operation=None, id=None):
 
 def main(paramStr):
     operation = START_REPORT
-    id = None
+    report_id = None
     if paramStr == "status":
         operation = REPORT_STATUS
     if paramStr == "current":
         operation = CURRENTLY_WORKING_REPORT
     if paramStr == "download":
         operation = DOWNLOAD_REPORT
-        id = sys.argv[2]
+        report_id = sys.argv[2]
     if (paramStr == "help") or (paramStr == "--help"):
         print """
         To use the Amazon Inventory Management API to get inventory reports, you must call this script the following way
@@ -73,7 +73,7 @@ def main(paramStr):
         """
         return
     
-    output = callAmazon(operation, id)
+    output = callAmazon(operation, report_id)
     if operation == START_REPORT:
         print output
     if operation == CURRENTLY_WORKING_REPORT:
