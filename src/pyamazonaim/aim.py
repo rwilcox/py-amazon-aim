@@ -40,10 +40,13 @@ class Report(object):
     def _amazon_date_time_to_python_date_time(self, date_string):
         # example date string:
         #09-13-2009:10-11-31
-        date, time = date_string.split(":")
-        month, day, year = date.split("-")
-        hour, minute, second = time.split("-")
-        return datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+        if date_string:
+            date, time = date_string.split(":")
+            month, day, year = date.split("-")
+            hour, minute, second = time.split("-")
+            return datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+        else:
+            return None
     
     def set_attribute_from_html(self, attributeName, attributeValue):
         """meant to take raw input from Amazon's XML output and turn it into
