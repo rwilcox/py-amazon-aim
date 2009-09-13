@@ -5,6 +5,7 @@ By Ryan Wilcox <rwilcox@wilcoxd.com>
 
 import os
 import sys
+import samples_common_utils as utils
 
 START_REPORT = 0
 REPORT_STATUS = 1
@@ -24,15 +25,10 @@ except ImportError:
     
 
 
-def get_username_password():
-    """Gets the username and password from (somewhere that can't be checked into VCS)"""
-    username = os.environ["AMAZON_USERNAME"]
-    password = os.environ["AMAZON_PASSWORD"]
-    return username, password
 
 def callAmazon(operation=None, report_id=None):
     """Performs operations on the Amazon API"""
-    uname, passw = get_username_password()
+    uname, passw = utils.get_username_password()
     connection = AmazonAIM(uname, passw)
     output = None
     
