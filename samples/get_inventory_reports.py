@@ -11,6 +11,7 @@ REPORT_STATUS = 1
 DOWNLOAD_REPORT = 2
 CURRENTLY_WORKING_REPORT = 3
 DOWNLOAD_REPORT_FLAT = 4
+MOST_RECENT_REPORT = 5
 
 try:
     from pyamazonaim.aim import *
@@ -54,6 +55,8 @@ def main(paramStr):
         operation = REPORT_STATUS
     if paramStr == "current":
         operation = CURRENTLY_WORKING_REPORT
+    if paramStr == "recent":
+        operation = MOST_RECENT_REPORT
     if paramStr == "download":
         operation = DOWNLOAD_REPORT
         report_id = sys.argv[2]
@@ -71,6 +74,13 @@ def main(paramStr):
         # so run this command, go off and do something else, then run it again, and repeat
         # until you see that no report is currently working.
         # anyway, export REPORT_ID=(the report ID from the output from this command)
+        #
+        # If you do NOT get a report id back then it's possible (for sellers with a low inventory count)
+        # that Amazon was able to process the request IMMEDIATELY, and the report is done by the time we start looking for reports with no end date
+        # in that case, use:
+        $ python get_inventory_reports recent
+        # which will return the report id for the MOST recent report
+        
         
         $ python download $REPORT_ID   # which will give you the report amazon generated for you
            OR
@@ -91,6 +101,10 @@ def main(paramStr):
         else:
             print "No report currently working. Your report is probably finished!"
         
+    if operation == MOST_RECENT_REPORT:
+        # TODO
+        pass
+    
     if operation == REPORT_STATUS:
         for curr_report in output:
             if curr_report["reportendtime"]:
