@@ -23,6 +23,9 @@ class AmazonAIM(object):
         self.password = password
     
     
+    # _____________________________________________________________________________
+    # PRIVATE METHODS HERE (Yes, order of methods reads kind of backwards...)
+    # _____________________________________________________________________________
     def _connect( self, url, **extraParams ):
         req = urllib2.Request(url)
         base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
@@ -47,6 +50,9 @@ class AmazonAIM(object):
         return output
     
     
+    # _____________________________________________________________________________
+    # Methods that correspond almost exactly with Amazon Inventory Management APIs
+    # _____________________________________________________________________________
     def generate_open_listings_lite_report(self):
         """open_listings_lite creates an open listings(lite) report on the server.
         You'll need to wait a while and ping the server with a status_open_listings_report(). Amazon's documentation says
@@ -120,6 +126,11 @@ class AmazonAIM(object):
         else:
             return arrayOfDictionaries
     
+    
+    # _____________________________________________________________________________
+    # Methods that provide an abstraction over the Amazon Inventory Management APIs
+    # (abstraction or convenience, that is)
+    # _____________________________________________________________________________
     def there_is_a_report_processing(self, lite=True):
         """a convenience method returns True, reportID if there's a report that we're waiting for Amazon to finish,
         False, None otherwise."""
