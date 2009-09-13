@@ -52,7 +52,7 @@ def main(paramStr):
     if paramStr == "current":
         operation = CURRENTLY_WORKING_REPORT
     if paramStr == "download":
-        operation == DOWNLOAD_REPORT
+        operation = DOWNLOAD_REPORT
         id = sys.argv[2]
     if (paramStr == "help") or (paramStr == "--help"):
         print """
