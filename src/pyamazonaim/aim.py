@@ -24,6 +24,10 @@ class Report(object):
     def __repr__(self):
         return "aim.Report(report_id='%s', start=%s, end=%s) " % (self.report_id, self.start.__repr__(), self.end.__repr__())
     
+    def __lt__(self, other):
+        """Implement __lt__ to allow our object to be sorted"""
+        return (self.start < other.start)
+    
     @classmethod
     def get_all_reports(cls, connection, lite=True):
         """Return the user's current reports as Report objects"""
